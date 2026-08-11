@@ -1,0 +1,16 @@
+[project]
+name = "leetcode-importer"
+version = "0.1.0"
+description = "Generate files from LeetCode problems"
+requires-python = ">=3.12"
+dependencies = [
+    "click",
+    "requests",
+]
+
+[project.scripts]
+leetcode-importer = "leetcode_importer.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
