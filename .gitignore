@@ -1,0 +1,9 @@
+.vscode/
+
+.venv/
+
+src/leetcode_importer.egg-info/
+
+**/__pycache__/
+**/.pytest_cache/
+
