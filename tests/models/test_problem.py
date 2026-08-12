@@ -9,11 +9,8 @@ def problem():
         id=1,
         title="Two Sum",
         tags=["Array", "Hash Table"],
-        content="Given an array...",
-        code_snippets={
-            "python": "class Solution:",
-            "cpp": "class Solution {",
-        },
+        content_html="Given an array...",
+        code="class Solution:\n    pass",
     )
 
 
@@ -23,14 +20,6 @@ def test_problem_creation(problem: LeetCodeProblem):
     assert problem.tags == ["Array", "Hash Table"]
 
 
-def test_get_python_code(problem: LeetCodeProblem):
-    assert problem.get_code("python") == "class Solution:"
-
-
-def test_get_cpp_code(problem: LeetCodeProblem):
-    assert problem.get_code("cpp") == "class Solution {"
-
-
-def test_get_invalid_language(problem: LeetCodeProblem):
-    with pytest.raises(ValueError):
-        problem.get_code("java")
+def test_problem_is_immutable(problem: LeetCodeProblem):
+    with pytest.raises(AttributeError):
+        problem.title = "Other"
