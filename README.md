@@ -1,105 +1,189 @@
 # LeetCodeImporter
 
-A Python library and CLI tool for importing LeetCode problems and generating organized source files for solving them.
+A Python library and CLI for importing LeetCode problems into your local project. It retrieves the problem statement and starter code directly from the LeetCode GraphQL API, then generates a source file using language-specific templates.
 
-The project is designed to make it easier to start working on a LeetCode problem by automatically retrieving its information and creating a ready-to-use source file.
+The project was designed to be modular and extensible, making it easy to support new programming languages, customize templates, and integrate into different workflows.
+
+---
 
 ## Features
 
-* Fetch LeetCode problem information.
-* Generate source files for different programming languages.
-* Organize problems into directories based on their topics.
-* Use the tool directly from the command line.
-* Provide a reusable Python library.
-* Support automated testing for each project module.
+* Fetch problems directly from the LeetCode GraphQL API.
+* Generate starter files from language-specific templates.
+* Simple command-line interface built with Click.
+* Modular architecture following the Single Responsibility Principle.
+* Easy to extend with additional languages.
+* Fully tested with `pytest`.
 
-> **Current status:** Early development. Python is the first supported language.
+---
 
 ## Installation
 
-Clone the repository and install the project in editable mode:
+### Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/gl4a-dev/LeetCodeImporter.git
 cd LeetCodeImporter
+```
 
+### Create a virtual environment
+
+```bash
 python -m venv .venv
-source .venv/bin/activate
+```
 
+Activate it:
+
+**Linux / macOS**
+
+```bash
+source .venv/bin/activate
+```
+
+**Windows**
+
+```powershell
+.venv\Scripts\activate
+```
+
+### Install in editable mode
+
+```bash
 pip install -e .
 ```
+
+## Simple installation
+
+```bash
+pip install git+https://github.com/gl4a-dev/LeetCodeImporter.git@v0.1.0
+```
+
+---
 
 ## Usage
 
-Once installed, the project can be used through its command-line interface:
+Generate a Python solution file for a LeetCode problem:
 
 ```bash
-leetcode-importer --id 30 --language python
+leetcode-importer --id 1 --language python
 ```
 
-This will retrieve the specified LeetCode problem and generate the corresponding source file.
+By default, the generated file will be placed inside the `problems` directory.
 
-## Project Structure (proposed)
+### Custom output directory
+
+```bash
+leetcode-importer \
+    --id 30 \
+    --language python \
+    --output-dir solutions
+```
+
+### Overwrite an existing file
+
+```bash
+leetcode-importer \
+    --id 1 \
+    --language python \
+    --overwrite
+```
+
+---
+
+## Generated File
+
+Example output:
+
+```python
+"""
+0001. Two Sum
+
+Given an array of integers...
+"""
+
+class Solution(object):
+    def twoSum(self, nums, target):
+        ...
+```
+
+---
+
+## Project Structure
 
 ```text
-LeetCodeImporter/
-├── pyproject.toml
-├── README.md
-├── src/
-│   └── leetcode_importer/
-│       ├── __init__.py
-│       ├── cli.py
-│       │
-│       ├── client/
-│       │   ├── __init__.py
-│       │   └── leetcode.py
-│       │
-│       ├── models/
-│       │   ├── __init__.py
-│       │   └── problem.py
-│       │
-│       ├── generators/
-│       │   ├── __init__.py
-│       │   ├── base.py
-│       │   └── python.py
-│       │
-│       └── services/
-│           ├── __init__.py
-│           └── file_creator.py
-│
-└── tests/
+src/
+└── leetcode_importer/
     ├── client/
+    ├── filesystem/
     ├── generators/
-    └── services/
+    │   └── templates/
+    ├── models/
+    ├── parsers/
+    ├── services/
+    ├── cli.py
+    └── exceptions.py
+
+tests/
 ```
 
-The project follows a modular architecture so that fetching problems, representing problem data, generating source code, and creating files can evolve independently.
+---
 
-## Development
+## Architecture
 
-Install the project in editable mode and run the test suite with:
+The library is organized into independent components:
+
+| Component          | Responsibility                                   |
+| ------------------ | ------------------------------------------------ |
+| `LeetCodeClient`   | Fetches data from the LeetCode API               |
+| `LeetCodeProblem`  | Represents a LeetCode problem                    |
+| `GeneratorFactory` | Creates the appropriate generator for a language |
+| `PythonGenerator`  | Renders the output file using Jinja2 templates   |
+| `FileWriter`       | Writes generated content to disk                 |
+| `ImportService`    | Coordinates the complete import workflow         |
+| `CLI`              | User-facing command-line interface               |
+
+---
+
+## Running the Tests
+
+Run all tests:
 
 ```bash
-pip install -e .
 pytest
 ```
 
-Tests are added alongside new modules to ensure that each component can be developed and validated independently.
+Run with coverage:
 
-## Roadmap
+```bash
+pytest --cov=leetcode_importer
+```
 
-The initial development focuses on:
+---
 
-* [ ] Project structure
-* [ ] Python package configuration
-* [ ] Basic CLI
-* [ ] LeetCode API client
-* [ ] Problem data model
-* [ ] Python source generator
-* [ ] File creation service
-* [ ] End-to-end CLI workflow
-* [ ] Support for additional programming languages
+## Adding Support for a New Language
+
+Supporting a new language involves three steps:
+
+1. Create a new generator.
+
+```text
+generators/
+    java.py
+```
+
+2. Create a new Jinja template.
+
+```text
+generators/templates/
+    java.j2
+```
+
+3. Register the generator in `GeneratorFactory`.
+
+No changes to the CLI or the import workflow are required.
+
+---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENCE](LICENSE) file for details.
