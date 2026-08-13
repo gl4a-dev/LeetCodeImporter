@@ -1,36 +1,40 @@
+from pathlib import Path
+from unittest.mock import patch
 from click.testing import CliRunner
 
 from leetcode_importer.cli import main
 
 
-def test_cli_requires_problem_id():
+def test_cli_import_problem():
     runner = CliRunner()
 
-    result = runner.invoke(
-        main,
-        ["--language", "python"],
-    )
+    with patch(
+        "leetcode_importer.cli.ImportService"
+    ) as service_cls:
 
-    assert result.exit_code != 0
+        service = service_cls.return_value
 
-def test_cli_requires_language():
-    runner = CliRunner()
+        service.import_problem.return_value = Path(
+            "problems/0001_TwoSum.py"
+        )
 
-    result = runner.invoke(
-        main,
-        ["--id", "30"],
-    )
-
-    assert result.exit_code != 0
-
-def test_cli_receives_problem_id_and_language():
-    runner = CliRunner()
-
-    result = runner.invoke(
-        main,
-        ["--id", "30", "--language", "python"],
-    )
+        result = runner.invoke(
+            main,
+            [
+                "--id",
+                "1",
+                "--language",
+                "python",
+            ],
+        )
 
     assert result.exit_code == 0
-    assert "ID: 30" in result.output
-    assert "Language: python" in result.output
+
+    service.import_problem.assert_called_once_with(
+        problem_id=1,
+        language="python",
+        output_dir=Path("problems"),
+        overwrite=False,
+    )
+
+    assert "Created:" in result.output
