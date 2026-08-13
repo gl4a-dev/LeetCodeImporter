@@ -5,6 +5,8 @@ from leetcode_importer.parsers.html import html_to_text
 
 class PythonGenerator(BaseGenerator):
     template_name = "python.j2"
+    language = "python"
+    extension = "py"
 
     def generate(self, problem: LeetCodeProblem) -> str:
         return self.render(
