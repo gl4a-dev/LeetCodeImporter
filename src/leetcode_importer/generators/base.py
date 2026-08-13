@@ -7,6 +7,8 @@ from leetcode_importer.models.problem import LeetCodeProblem
 
 class BaseGenerator(ABC):
     template_name: str
+    language: str
+    extension: str
 
     _environment = Environment(
         loader=PackageLoader(
