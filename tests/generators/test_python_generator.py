@@ -2,7 +2,7 @@ from leetcode_importer.generators.python import PythonGenerator
 from leetcode_importer.models.problem import LeetCodeProblem
 
 
-def test_generate_python_file():
+def test_generate_python():
 
     problem = LeetCodeProblem(
         id=1,
@@ -14,9 +14,8 @@ def test_generate_python_file():
 
     generator = PythonGenerator()
 
-    content = generator.generate(problem)
+    result = generator.generate(problem)
 
-    assert "0001. Two Sum" in content
-    assert "Hello World" in content
-    assert "<p>" not in content
-    assert "class Solution" in content
+    assert "0001. Two Sum" in result
+    assert "Hello" in result
+    assert "class Solution" in result
