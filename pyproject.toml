@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "click",
     "requests",
+    "jinja2",
 ]
 
 [project.scripts]
@@ -14,3 +15,8 @@ leetcode-importer = "leetcode_importer.cli:main"
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+leetcode_importer = [
+    "generators/templates/*.j2",
+]
