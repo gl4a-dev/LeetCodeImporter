@@ -1,11 +1,15 @@
 from leetcode_importer.generators.base import BaseGenerator
 from leetcode_importer.generators.python import PythonGenerator
+from leetcode_importer.generators.cpp import CppGenerator
+from leetcode_importer.generators.java import JavaGenerator
 
 
 class GeneratorFactory:
 
     _generators: dict[str, type[BaseGenerator]] = {
         "python": PythonGenerator,
+        "cpp": CppGenerator,
+        "java": JavaGenerator,
     }
 
     @classmethod
